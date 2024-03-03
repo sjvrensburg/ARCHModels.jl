@@ -125,6 +125,52 @@ function quantile(::StdNormal, q::Real)
 end
 
 ################################################################################
+#StdSech
+"""
+    StdSech{T} <: StandardizedDistribution{T}
+
+The standard Hyperbolic Secant distribution.
+"""
+struct StdSech{T} <: StandardizedDistribution{T}
+    coefs::Vector{T}
+    function StdSech{T}(coefs::Vector) where {T}
+        length(coefs) == 0 || throw(NumParamError(0, length(coefs)))
+        new{T}(coefs)
+    end
+end
+"""
+    StdSech(T::Type=Float64)
+    StdSech(v::Vector)
+    StdSech{T}()
+
+Construct an instance of StdSech.
+"""
+StdSech(T::Type{<:AbstractFloat}=Float64) = StdSech(T[])
+StdSech{T}() where {T<:AbstractFloat} = StdSech(T[])
+StdSech(v::Vector{T}) where {T} = StdSech{T}(v)
+rand(rng::AbstractRNG, ::StdSech{T}) where {T} = 0.5π * log(tan(0.5π * rand(rng, T))) 
+
+@inline logkernel(::Type{<:StdSech}, x, coefs) = log(sech(-0.5π * x))
+@inline logconst(::Type{<:StdSech}, coefs::Vector{T}) where {T} = -T(log(2))
+nparams(::Type{<:StdSech}) = 0
+coefnames(::Type{<:StdSech}) = String[]
+distname(::Type{<:StdSech}) = "Hyperbolic Secant"
+
+function constraints(::Type{<:StdSech}, ::Type{T})  where {T<:AbstractFloat}
+    lower = T[]
+    upper = T[]
+    return lower, upper
+end
+
+function startingvals(::Type{<:StdSech}, data::Vector{T})  where {T<:AbstractFloat}
+    return T[]
+end
+
+function quantile(::StdSech, q::Real)
+    0.5π * log(tan(0.5π * q)) 
+end
+
+################################################################################
 #StdT
 
 """
