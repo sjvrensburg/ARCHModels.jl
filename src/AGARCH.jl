@@ -72,8 +72,8 @@ function startingvals(::Type{<:AGARCH{p,q}}, data::Array{T}) where {p, q, T}
         P += x0[2]
     end
     if q ≥ 1
-        x[2+p] = 0.05
-        P += sqrt(2/π)*x[2+p]
+        x0[2+p] = 0.05
+        P += sqrt(2/π)*x0[2+p]
     end
     x0[1] = sum(abs.(data)) / length(data) * (1 - P)
     return x0
@@ -116,9 +116,9 @@ function coefnames(::Type{<:AGARCH{p,q}}) where {p, q}
     names = Array{String, 1}(undef, p+3*q+1)
     names[1] = "ω"
     names[2:(p+1)] .= (i -> "β"*subscript(i)).([1:p...])
-    names[(p+2):(p+q+1)] .= (i -> "α"*subscript(i)).([1:p...])
-    names[(p+q+2):(1+p+2*q)] .= (i -> "λ"*subscript(i)).([1:p...])
-    names[(2+p+2*q):end] .= (i -> "ρ"*subscript(i)).([1:p...])
+    names[(p+2):(p+q+1)] .= (i -> "α"*subscript(i)).([1:q...])
+    names[(p+q+2):(1+p+2*q)] .= (i -> "λ"*subscript(i)).([1:q...])
+    names[(2+p+2*q):end] .= (i -> "ρ"*subscript(i)).([1:q...])
     return names
 end
 
