@@ -53,7 +53,7 @@ end
     for i in 1:p
         den -= coefs[i+1]
     end
-    for i in 1:q:
+    for i in 1:q
         α = coefs[i+1+p]
         λ = coefs[i+q+1+p]
         ρ = coefs[i+2*q+1+p]
