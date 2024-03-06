@@ -14,7 +14,7 @@ using Reexport
 @reexport using StatsBase
 using StatsFuns: normcdf, normccdf, normlogpdf, norminvcdf, log2π, logtwo, RFunctions.tdistinvcdf, RFunctions.gammainvcdf
 using GLM: modelmatrix, response, LinearModel
-using SpecialFunctions: beta, gamma, digamma #, lgamma
+using SpecialFunctions: beta, gamma, digamma, erf #, lgamma
 using MuladdMacro
 using PrecompileTools
 # work around https://github.com/JuliaMath/SpecialFunctions.jl/issues/186
@@ -36,7 +36,9 @@ using LinearAlgebra
 using DataStructures: CircularBuffer
 using DelimitedFiles
 using Statistics: cov
+using QuadGK
 
+import QuadGK: quadgk
 import Distributions: quantile
 import Base: show, showerror, eltype
 import Statistics: mean
@@ -50,7 +52,7 @@ export ARCHModel, UnivariateARCHModel, UnivariateVolatilitySpec, StandardizedDis
        simulate, simulate!, selectmodel, StdNormal, StdSech, StdT, StdGED, StdSkewT, Intercept, Regression,
        NoIntercept, ARMA, AR, MA, BG96, volatilities, mean, quantile, VaRs, pvalue, means, VolatilitySpec,
 	   MultivariateVolatilitySpec, MultivariateStandardizedDistribution, MultivariateARCHModel, MultivariateStdNormal,
-	   EGARCH, ARCH, GARCH, TGARCH, ARCHLMTest, DQTest,
+	   EGARCH, ARCH, GARCH, TGARCH, AGARCH, ARCHLMTest, DQTest,
 	   DOW29, DCC, CCC, covariances, correlations
 
 
@@ -61,6 +63,7 @@ include("meanspecs.jl")
 include("univariatestandardizeddistributions.jl")
 include("EGARCH.jl")
 include("TGARCH.jl")
+include("AGARCH.jl")
 include("tests.jl")
 include("multivariatearchmodel.jl")
 include("multivariatestandardizeddistributions.jl")
